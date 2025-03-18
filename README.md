@@ -1,5 +1,5 @@
 <h4 align="center">
-    <img alt="logo" src="https://raw.githubusercontent.com/imum-ai/promptlab/main/img/logo.png" style="">
+    <img alt="logo" src="https://raw.githubusercontent.com/imum-ai/promptlab/main/img/banner.png" style="">
 </h4>
 
 ## Table of Contents
@@ -7,6 +7,7 @@
 - [Why PromptLab](#why-promptlab)
 - [Documentation](#documentation)
 - [Samples](#samples)
+- [How Tos](#samples)
 
 ## PromptLab
 
@@ -31,3 +32,7 @@ Check the [documentation](https://github.com/imum-ai/promptlab/blob/main/docs/RE
 ## Samples
 
 - [Quickstart](https://github.com/imum-ai/promptlab/tree/main/samples/quickstart)
+
+## How Tos
+
+- [Evaluating prompts locally with Ollama and PromptLab](https://www.linkedin.com/pulse/evaluating-prompts-locally-ollama-promptlab-raihan-alam-i2iic)

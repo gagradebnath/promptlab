@@ -1,10 +1,7 @@
-# Custom Metric
+from openai import OpenAI
 
-This sample ([custom_metric.py](custom_model.py)) demonstrates how to use PromptLab to bring your own model to PromptLab. Here we shall use LMStudio API to build a new model class.
-
-## Creating custom model 
-
-The following code snippet implements a LMStudio based model.
+from promptlab.model.model import Model
+from promptlab.types import  InferenceResult, InferenceModelConfig
 
 class LmStudio(Model):
 
@@ -43,23 +40,3 @@ class LmStudio(Model):
             completion_tokens=completion_token,
             latency_ms=latency_ms
         )
-
-## Using custom model
-
-The following code snippet demonstrate how to use the custom model in the experiment.
-
-    experiment_config = {
-        "inference_model" : lmstudio,
-        "embedding_model" : ollama_embedding,
-        "prompt_template": pt,
-        "dataset": ds,
-        "evaluation": [
-                {
-                    "metric": "Fluency",
-                    "column_mapping": {
-                        "response":"$inference"
-                    },
-                },                
-            ],    
-    }
-    pl.experiment.run(experiment_config)

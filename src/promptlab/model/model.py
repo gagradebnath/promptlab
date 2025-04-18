@@ -1,13 +1,34 @@
 from abc import ABC, abstractmethod
+<<<<<<< HEAD
+from dataclasses import dataclass
+from typing import Any, Optional
+
+@dataclass
+class ModelConfig:
+    type: str
+    model_deployment: str
+    api_key: Optional[str] = None
+    api_version: Optional[str] = None
+    endpoint: Optional[str] = None
+=======
 from typing import Any
 
 from promptlab.types import EmbeddingModelConfig, InferenceResult, InferenceModelConfig
 
+>>>>>>> main
 
+@dataclass
+class InferenceResult:
+    inference: str
+    prompt_tokens: int
+    completion_tokens: int
+    latency_ms: int
+    
 class Model(ABC):
     
-    def __init__(self, model_config: InferenceModelConfig):
-        self.model_config = model_config
+    def __init__(self, model_config: ModelConfig):
+        config = ModelConfig(**model_config)
+        self.config = config
 
     @abstractmethod
     def __call__(self, system_prompt: str, user_prompt: str)->InferenceResult:
@@ -15,8 +36,9 @@ class Model(ABC):
 
 class EmbeddingModel(ABC):
     
-    def __init__(self, model_config: EmbeddingModelConfig):
-        self.model_config = model_config
+    def __init__(self, model_config: ModelConfig):
+        config = ModelConfig(**model_config)
+        self.config = config
 
     @abstractmethod
     def __call__(self, text: str) -> Any:

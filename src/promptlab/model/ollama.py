@@ -1,16 +1,14 @@
 from typing import Any
 import ollama
 
-from promptlab.model.model import EmbeddingModel, Model
-from promptlab.types import EmbeddingModelConfig, InferenceResult, InferenceModelConfig
+from promptlab.model.model import EmbeddingModel, Model, InferenceResult, ModelConfig
 
 class Ollama(Model):
 
-    def __init__(self, model_config: InferenceModelConfig):
+    def __init__(self, model_config: ModelConfig):
 
         super().__init__(model_config)
 
-        self.model_config = model_config
         self.client = ollama
         
     def __call__(self, system_prompt: str, user_prompt: str)->InferenceResult:
@@ -27,7 +25,7 @@ class Ollama(Model):
         ]
 
         chat_completion = self.client.chat(
-            model=self.model_config.inference_model_deployment, 
+            model=self.config.model_deployment, 
             messages=payload
         )
         
@@ -45,16 +43,15 @@ class Ollama(Model):
     
 class Ollama_Embedding(EmbeddingModel):
 
-    def __init__(self, model_config: EmbeddingModelConfig):
+    def __init__(self, model_config: ModelConfig):
 
         super().__init__(model_config)
 
-        self.model_config = model_config
         self.client = ollama
     
     def __call__(self, text: str) -> Any:
         embedding = self.client.embed(
-                    model=self.model_config.embedding_model_deployment,
+                    model=self.config.model_deployment,
                     input=text,
                     )["embeddings"]
 

@@ -21,7 +21,11 @@ dependencies = [
     "flask>=3.0.0",
     "flask-cors>=5.0.0",
     "click>=8.0.0",
+    "langchain-ollama",
     "ollama>=0.4.7",
+    "aiohttp>=3.8.0",
+    "fastapi>=0.100.0",
+    "uvicorn>=0.22.0",
     "numpy",
 ]
 requires-python = ">=3.8"
@@ -37,4 +41,4 @@ promptlab = ["web/*.html"]
 where = ["src"]
 
 [project.scripts]
-promptlab = "promptlab.cli:main" 
+promptlab = "promptlab.cli:main"

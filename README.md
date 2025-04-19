@@ -1,5 +1,5 @@
 <div align="center">
-    <img alt="logo" src="https://raw.githubusercontent.com/imum-ai/promptlab/main/img/logo.png" style="height:200px">
+    <img alt="logo" src="img/logo-new.png" style="height:300px">
     <h1>PromptLab</h1>
     <p>A free, lightweight, open-source experimentation tool for Gen AI applications</p>
     <a href="https://pypi.org/project/promptlab/"><img src="https://img.shields.io/pypi/v/promptlab.svg" alt="PyPI Version"></a>
@@ -8,32 +8,34 @@
 </div>
 
 ## 📋 Table of Contents
-- [Overview](#overview)
-- [Features](#features)
-- [Installation](#installation)
-- [Quick Start](#quick-start)
-- [Core Concepts](#core-concepts)
-- [Supported Models](#supported-models)
-- [Examples](#examples)
-- [Documentation](#documentation)
-- [Articles & Tutorials](#articles--tutorials)
-- [Contributing](#contributing)
-- [License](#license)
+
+- [Overview](#overview-)
+- [Features](#features-)
+- [Installation](#installation-)
+- [Quick Start](#quick-start-)
+- [Core Concepts](#core-concepts-)
+- [Supported Models](#supported-models-)
+- [Examples](#examples-)
+- [Documentation](#documentation-)
+- [Articles & Tutorials](#articles--tutorials-)
+- [Contributing](#contributing-)
+- [License](#license-)
 
 ## Overview 🔍
 
 PromptLab is a free, lightweight, open-source experimentation tool for Gen AI applications. It streamlines prompt engineering, making it easy to set up experiments, evaluate prompts, and track them in production - all without requiring any cloud services or complex infrastructure.
 
 With PromptLab, you can:
+
 - Create and manage prompt templates with versioning
 - Build and maintain evaluation datasets
 - Run experiments with different models and prompts
-- Evaluate results using built-in or custom metrics
+- Evaluate model performance using built-in and custom metrics
 - Compare experiment results side-by-side
 - Deploy optimized prompts to production
 
 <div align="center">
-    <img alt="PromptLab Studio" src="https://raw.githubusercontent.com/imum-ai/promptlab/main/img/studio-home.png" style="max-width:800px">
+    <img alt="PromptLab Studio" src="img/studio-exp.png" style="max-width:800px">
 </div>
 
 ## Features ✨
@@ -46,6 +48,7 @@ With PromptLab, you can:
 - **Visual Studio**: Compare experiments and track assets through a local web interface
 - **Multiple Model Support**: Works with Azure OpenAI, Ollama, DeepSeek and more
 - **Version Control**: Automatic versioning of all assets for reproducibility
+- **Async Support**: Run experiments and invoke models asynchronously for improved performance
 
 ## Installation 📦
 
@@ -122,33 +125,67 @@ pl.experiment.run(experiment_config)
 pl.studio.start(8000)
 ```
 
+### Async Support
+
+PromptLab also supports asynchronous operations:
+
+```python
+import asyncio
+from promptlab import PromptLab
+
+async def main():
+    # Initialize PromptLab
+    tracer_config = {
+        "type": "sqlite",
+        "db_file": "./promptlab.db"
+    }
+    pl = PromptLab(tracer_config)
+
+    # Run experiment asynchronously
+    await pl.run_experiment_async(experiment_config)
+
+    # Start the PromptLab Studio asynchronously
+    await pl.start_studio_async(8000)
+
+# Run the async main function
+asyncio.run(main())
+```
+
 ## Core Concepts 🧩
 
 ### Tracer
+
 Storage that maintains assets and experiments. Currently uses SQLite for simplicity and portability.
 
 ### Assets
+
 Immutable artifacts used in experiments, with automatic versioning:
+
 - **Prompt Templates**: Prompts with optional placeholders for dynamic content
 - **Datasets**: JSONL files containing evaluation data
 
 ### Experiments
+
 Evaluate prompts against datasets using specified models and metrics.
 
 ### PromptLab Studio
+
 A local web interface for visualizing experiments and comparing results.
 
 ## Supported Models 🤖
 
 - **Azure OpenAI**: Connect to Azure-hosted OpenAI models
 - **Ollama**: Run experiments with locally-hosted models
-- **DeepSeek**: Use DeepSeek's AI models
+- **OpenRouter**: Access a wide range of AI models (OpenAI, Anthropic, DeepSeek, Mistral, etc.) via OpenRouter API
+- **Custom Models**: Integrate your own model implementations
 
 ## Examples 📚
 
 - [Quickstart](https://github.com/imum-ai/promptlab/tree/main/samples/quickstart): Getting started with PromptLab
 - [Asset versioning](https://github.com/imum-ai/promptlab/tree/main/samples/asset_versioning): Versioning Prompts and Datasets
 - [Custom Metric](https://github.com/imum-ai/promptlab/tree/main/samples/custom_metric): Creating custom evaluation metrics
+
+- [Async Example](https://github.com/imum-ai/promptlab/tree/main/samples/async_example): Using async functionality with Ollama and OpenRouter models for improved performance
 - [Custom Model](https://github.com/imum-ai/promptlab/tree/main/samples/custom_model): Bring your own model for evaluation
 
 ## Documentation 📖
@@ -159,6 +196,23 @@ For comprehensive documentation, visit our [Documentation Page](https://github.c
 
 - [Evaluating prompts locally with Ollama and PromptLab](https://www.linkedin.com/pulse/evaluating-prompts-locally-ollama-promptlab-raihan-alam-i2iic)
 - [Creating custom prompt evaluation metrics with PromptLab](https://www.linkedin.com/pulse/promptlab-creating-custom-metric-prompt-evaluation-raihan-alam-o0slc)
+
+## CI/CD 🔄
+
+PromptLab uses GitHub Actions for continuous integration and testing:
+
+- **Unit Tests**: Run unit tests for all components of PromptLab
+- **Integration Tests**: Run integration tests that test the interaction between components
+- **Performance Tests**: Run performance tests to ensure performance requirements are met
+
+The tests are organized into the following directories:
+
+- `tests/unit/`: Unit tests for individual components
+- `tests/integration/`: Tests that involve multiple components working together
+- `tests/performance/`: Tests that measure performance
+- `tests/fixtures/`: Common test fixtures and utilities
+
+You can find more information about the CI/CD workflows in the [.github/workflows](https://github.com/imum-ai/promptlab/tree/main/.github/workflows) directory.
 
 ## Contributing 👥
 

@@ -95,7 +95,7 @@ Experiments can be run asynchronously:
 pl.experiment.run(experiment_config)
 
 # Asynchronous execution
-await pl.run_experiment_async(experiment_config)
+await pl.experiment.run_async(experiment_config)
 ```
 
 ### Async Studio
@@ -107,7 +107,7 @@ The PromptLab Studio can be started asynchronously:
 pl.studio.start(8000)
 
 # Asynchronous start
-await pl.start_studio_async(8000)
+await pl.studio.start_async(8000)
 ```
 
 ### Custom Evaluators

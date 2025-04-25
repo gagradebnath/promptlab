@@ -1,5 +1,5 @@
 <div align="center">
-    <img alt="logo" src="img/logo-new.png" style="height:300px">
+    <img alt="logo" src="img/logo.png" style="height:300px">
     <h1>PromptLab</h1>
     <p>A free, lightweight, open-source experimentation tool for Gen AI applications</p>
     <a href="https://pypi.org/project/promptlab/"><img src="https://img.shields.io/pypi/v/promptlab.svg" alt="PyPI Version"></a>

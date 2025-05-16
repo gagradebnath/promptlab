@@ -3,7 +3,7 @@ import sys
 import os
 import time
 import pytest
-from tests.fixtures.test_utils import MockModel
+from tests.fixtures.testUtils import MockModel
 
 # Add the src directory to the Python path
 sys.path.insert(0, os.path.abspath("./src"))
@@ -19,9 +19,7 @@ async def test_async_promptlab():
 
         # Test async model invocation
         model_config = ModelConfig(
-            type="mock",
-            inference_model_deployment="mock-model",
-            embedding_model_deployment="mock-model",
+            model_deployment="mock-model",
         )
 
         # Use the fixture model with 0.5s delay

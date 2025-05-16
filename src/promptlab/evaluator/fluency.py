@@ -73,3 +73,6 @@ class Fluency(Evaluator):
         inference_result = self.inference(system_prompt, user_prompt)
 
         return inference_result.inference
+
+
+fluency = Fluency

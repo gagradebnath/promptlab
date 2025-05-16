@@ -38,13 +38,10 @@ async def test_async_model_invocation():
                 prompt_tokens=10,
                 completion_tokens=20,
                 latency_ms=100,
-            )
+            )  # Create a model config
 
-    # Create a model config
     model_config = ModelConfig(
-        type="mock",
-        inference_model_deployment="mock-model",
-        embedding_model_deployment="mock-model",
+        model_deployment="mock-model",
     )
 
     # Create a model instance
@@ -81,28 +78,24 @@ async def test_async_model_invocation():
 @pytest.mark.asyncio
 async def test_experiment_async_execution():
     """Test async experiment execution"""
-    from promptlab.experiment import Experiment
+    from promptlab._experiment import Experiment
 
     # Create a mock tracer
     tracer = MagicMock()
     tracer.db_client.fetch_data.return_value = [
         {"asset_binary": "system: test\nuser: test", "file_path": "test.jsonl"}
-    ]
-
-    # Create a mock dataset
+    ]  # Create a mock dataset
     dataset = [{"id": 1, "text": "test"}]
 
     # Mock the Utils.load_dataset method
-    with patch("promptlab.experiment.Utils") as mock_utils:
-        mock_utils.load_dataset.return_value = dataset
-        mock_utils.split_prompt_template.return_value = (
+    with patch("promptlab._utils.Utils") as mockUtils:
+        mockUtils.load_dataset.return_value = dataset
+        mockUtils.split_prompt_template.return_value = (
             "system: test",
             "user: test",
             [],
-        )
-
-        # Mock the ExperimentConfig validation
-        with patch("promptlab.experiment.ExperimentConfig") as mock_config_class:
+        )  # Mock the ExperimentConfig validation
+        with patch("promptlab._config.ExperimentConfig") as mock_config_class:
             # Make the mock return itself when called with **kwargs
             mock_instance = MagicMock()
             mock_config_class.return_value = mock_instance
@@ -115,13 +108,11 @@ async def test_experiment_async_execution():
 
             # Create a mock experiment config
             experiment_config = {}
-            # We'll patch the validation in the Experiment class
-
-            # Create an experiment instance
+            # We'll patch the validation in the Experiment class            # Create an experiment instance
             experiment = Experiment(tracer)
 
-            # Mock the init_batch_eval_async method
-            with patch.object(experiment, "init_batch_eval_async") as mock_batch_eval:
+            # Mock the _init_batch_eval_async method (note the leading underscore)
+            with patch.object(experiment, "_init_batch_eval_async") as mock_batch_eval:
                 mock_batch_eval.return_value = asyncio.Future()
                 mock_batch_eval.return_value.set_result([{"experiment_id": "test"}])
 
@@ -252,18 +243,15 @@ async def test_model_max_concurrent_tasks():
     # The test for max_concurrent_tasks is not directly testable in this way
     # because the Model class itself doesn't implement the concurrency limit
     # The concurrency limit is implemented in the Experiment class
-    # So we'll just verify that the max_concurrent_tasks attribute is set correctly
-
-    # Test with default max_concurrent_tasks (5)
+    # So we'll just verify that the max_concurrent_tasks attribute is set correctly    # Test with default max_concurrent_tasks (5)
     model_config_default = ModelConfig(
-        type="mock",
-        inference_model_deployment="mock-model",
+        model_deployment="mock-model",
     )
     model_default = DelayedMockModel(model_config_default)
 
     # Test with custom max_concurrent_tasks (2)
     model_config_limited = ModelConfig(
-        type="mock", inference_model_deployment="mock-model", max_concurrent_tasks=2
+        model_deployment="mock-model", max_concurrent_tasks=2
     )
     model_limited = DelayedMockModel(model_config_limited)
 
@@ -275,7 +263,7 @@ async def test_model_max_concurrent_tasks():
 @pytest.mark.asyncio
 async def test_experiment_concurrency_limit():
     """Test the concurrency limit in experiment async execution"""
-    from promptlab.experiment import Experiment
+    from promptlab._experiment import Experiment
     from promptlab.model.model import Model
     from promptlab.types import ModelConfig, InferenceResult
     import time
@@ -321,25 +309,23 @@ async def test_experiment_concurrency_limit():
     tracer = MagicMock()
     tracer.db_client.fetch_data.return_value = [
         {"asset_binary": "system: test\nuser: test", "file_path": "test.jsonl"}
-    ]
-
-    # Create a mock dataset with multiple records
+    ]  # Create a mock dataset with multiple records
     dataset = [{"id": i, "text": f"test {i}"} for i in range(10)]
 
     # Mock the Utils.load_dataset method
-    with patch("promptlab.experiment.Utils") as mock_utils:
-        mock_utils.load_dataset.return_value = dataset
-        mock_utils.split_prompt_template.return_value = (
+    with patch("promptlab._utils.Utils") as mockUtils:
+        mockUtils.load_dataset.return_value = dataset
+        mockUtils.split_prompt_template.return_value = (
             "system: test",
             "user: test",
             [],
         )
-        mock_utils.prepare_prompts = lambda item, sys, usr, vars: (sys, usr)
-
-        # Create a model with limited concurrency
+        mockUtils.prepare_prompts = lambda item, sys, usr, vars: (
+            sys,
+            usr,
+        )  # Create a model with limited concurrency
         model_config = ModelConfig(
-            type="mock",
-            inference_model_deployment="mock-model",
+            model_deployment="mock-model",
             max_concurrent_tasks=3,  # Limit to 3 concurrent tasks
         )
         model = TrackedModel(model_config)
@@ -361,10 +347,8 @@ async def test_experiment_concurrency_limit():
         experiment_config.prompt_template = prompt_template
         experiment_config.dataset = dataset
         experiment_config.inference_model = model
-        experiment_config.evaluation = []
-
-        # Run the experiment asynchronously
-        await experiment.init_batch_eval_async(
+        experiment_config.evaluation = []  # Run the experiment asynchronously
+        await experiment._init_batch_eval_async(
             dataset, "system: test", "user: test", [], experiment_config
         )
 

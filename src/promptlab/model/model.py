@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Union, Awaitable
+from typing import List, Union, Awaitable
 import asyncio
 
 from promptlab.types import InferenceResult, ModelConfig
@@ -8,7 +8,6 @@ from promptlab.types import InferenceResult, ModelConfig
 class Model(ABC):
     def __init__(self, model_config: ModelConfig):
         self.model_config = model_config
-        self.config = model_config
         self.max_concurrent_tasks = getattr(model_config, "max_concurrent_tasks", 5)
 
     @abstractmethod
@@ -45,8 +44,7 @@ class Model(ABC):
 class EmbeddingModel(ABC):
     def __init__(self, model_config: ModelConfig):
         self.model_config = model_config
-        self.config = model_config
 
     @abstractmethod
-    def __call__(self, text: str) -> Any:
+    def __call__(self, text: str) -> List[float]:
         pass

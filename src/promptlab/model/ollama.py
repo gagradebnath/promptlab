@@ -1,7 +1,6 @@
-from typing import Any
+from typing import List
 import ollama
 import asyncio
-import time
 
 from promptlab.model.model import EmbeddingModel, Model, InferenceResult, ModelConfig
 
@@ -19,10 +18,10 @@ class Ollama(Model):
         ]
 
         chat_completion = self.client.chat(
-            model=self.model_config.inference_model_deployment, messages=payload
+            model=self.model_config.model_deployment, messages=payload
         )
 
-        latency_ms = chat_completion.total_duration
+        latency_ms = chat_completion.total_duration / 1000000
         inference = chat_completion.message.content
         prompt_token = chat_completion.eval_count
         completion_token = chat_completion.prompt_eval_count
@@ -44,20 +43,16 @@ class Ollama(Model):
             {"role": "user", "content": user_prompt},
         ]
 
-        start_time = time.time()
-
         # Run the synchronous Ollama call in a thread pool
         loop = asyncio.get_event_loop()
         chat_completion = await loop.run_in_executor(
             None,
             lambda: self.client.chat(
-                model=self.model_config.inference_model_deployment, messages=payload
+                model=self.model_config.model_deployment, messages=payload
             ),
         )
 
-        end_time = time.time()
-        latency_ms = (end_time - start_time) * 1000
-
+        latency_ms = chat_completion.total_duration / 1000000
         inference = chat_completion.message.content
         prompt_token = chat_completion.eval_count
         completion_token = chat_completion.prompt_eval_count
@@ -76,9 +71,9 @@ class Ollama_Embedding(EmbeddingModel):
 
         self.client = ollama
 
-    def __call__(self, text: str) -> Any:
+    def __call__(self, text: str) -> List[float]:
         embedding = self.client.embed(
-            model=self.model_config.embedding_model_deployment,
+            model=self.model_config.model_deployment,
             input=text,
         )["embeddings"]
 

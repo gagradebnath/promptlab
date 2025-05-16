@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Dict, List
 import json
 
-from promptlab.config import ExperimentConfig, TracerConfig
+from promptlab._config import ExperimentConfig, TracerConfig
 from promptlab.db.sqlite import SQLiteClient
 from promptlab.tracer.tracer import Tracer
 from promptlab.db.sql import SQLQuery
@@ -23,19 +23,13 @@ class SQLiteTracer(Tracer):
         timestamp = datetime.now().isoformat()
         experiment_id = experiment_summary[0]["experiment_id"]
 
+        # Convert model_config objects to dict for JSON serialization
+        inference_model_config = vars(experiment_config.inference_model.model_config)
+        embedding_model_config = vars(experiment_config.embedding_model.model_config)
+
         model = {
-            "inference_model_type": experiment_config.inference_model.model_config.type,
-            "inference_model_name": experiment_config.inference_model.model_config.inference_model_deployment,
-            "inference_model_api_version": experiment_config.inference_model.model_config.api_version,
-            "inference_model_endpoint": str(
-                experiment_config.inference_model.model_config.endpoint
-            ),
-            "embedding_model_type": experiment_config.embedding_model.model_config.type,
-            "embedding_model_name": experiment_config.embedding_model.model_config.embedding_model_deployment,
-            "embedding_model_api_version": experiment_config.embedding_model.model_config.api_version,
-            "embedding_model_endpoint": str(
-                experiment_config.embedding_model.model_config.endpoint
-            ),
+            "inference_model_config": inference_model_config,
+            "embedding_model_config": embedding_model_config,
         }
 
         asset = {

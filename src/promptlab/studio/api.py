@@ -4,7 +4,7 @@ from flask_cors import CORS
 
 from promptlab.db.sql import SQLQuery
 from promptlab.types import TracerConfig
-from promptlab.utils import Utils
+from promptlab._utils import Utils
 from promptlab.enums import AssetType
 
 

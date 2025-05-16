@@ -42,9 +42,7 @@ async def test_async_model_invocation():
 
     # Create a model config
     model_config = ModelConfig(
-        type="mock",
-        inference_model_deployment="mock-model",
-        embedding_model_deployment="mock-model",
+        model_deployment="mock-model",
     )
 
     # Create a model instance
@@ -81,7 +79,7 @@ async def test_async_model_invocation():
 @pytest.mark.asyncio
 async def test_experiment_async_execution():
     """Test async experiment execution"""
-    from promptlab.experiment import Experiment
+    from promptlab._experiment import Experiment
 
     # Create a mock tracer
     tracer = MagicMock()
@@ -93,9 +91,9 @@ async def test_experiment_async_execution():
     dataset = [{"id": 1, "text": "test"}]
 
     # Mock the Utils.load_dataset method
-    with patch("promptlab.experiment.Utils") as mock_utils:
-        mock_utils.load_dataset.return_value = dataset
-        mock_utils.split_prompt_template.return_value = (
+    with patch("promptlab.experiment.Utils") as mockUtils:
+        mockUtils.load_dataset.return_value = dataset
+        mockUtils.split_prompt_template.return_value = (
             "system: test",
             "user: test",
             [],

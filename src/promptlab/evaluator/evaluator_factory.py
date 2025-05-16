@@ -21,7 +21,8 @@ def import_evaluators():
                     and issubclass(attr, Evaluator)
                     and attr != Evaluator
                 ):
-                    evaluator_classes[attr.__name__] = attr
+                    evaluator_classes[attr_name] = attr
+
     return evaluator_classes
 
 

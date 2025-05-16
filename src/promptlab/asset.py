@@ -8,7 +8,7 @@ from promptlab.enums import AssetType
 from promptlab.db.sql import SQLQuery
 from promptlab.tracer.tracer import Tracer
 from promptlab.types import Dataset, PromptTemplate
-from promptlab.utils import Utils
+from promptlab._utils import Utils
 
 T = TypeVar("T", Dataset, PromptTemplate)
 
@@ -18,7 +18,7 @@ class Asset:
         self.tracer = tracer
 
     @overload
-    def create(self, asset: Dataset) -> Dataset: ...
+    def create(self, asset: PromptTemplate) -> PromptTemplate: ...
 
     @overload
     def create(self, asset: Dataset) -> Dataset: ...
@@ -27,7 +27,7 @@ class Asset:
     def update(self, asset: PromptTemplate) -> PromptTemplate: ...
 
     @overload
-    def update(self, asset: PromptTemplate) -> PromptTemplate: ...
+    def update(self, asset: Dataset) -> Dataset: ...
 
     @overload
     def deploy(self, asset: PromptTemplate, target_dir: str) -> None: ...

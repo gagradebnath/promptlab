@@ -8,7 +8,7 @@ Evaluators are a crucial component of PromptLab that help measure the quality of
     - [Fluency](#fluency-fluency)
     - [Coherence](#coherence-coherence)
     - [F1 Score](#f1-score-f1score)
-    - ROUGE
+    - [ROUGE](#rouge-score-rougescore)
 - RAG (Retrieval Augmented Generation)
     - [Semantic Similarity](#semantic-similarity-semanticsimilarity)
     - [Groundedness](#groundedness-groundedness)
@@ -91,6 +91,38 @@ The [F1 Score](../src/promptlab/evaluator/f1_score.py) evaluator calculates the 
 - **Usage**: Useful for evaluating how well a response captures the correct information, balancing both completeness (recall) and accuracy (precision)
 
 This evaluator calculates precision (proportion of shared words relative to the total words in the response) and recall (proportion of shared words relative to the total words in the ground truth), then computes the F1 score as the harmonic mean of these two values.
+
+#### F1 Score (`F1Score`)
+
+The [F1 Score](../src/promptlab/evaluator/f1_score.py) evaluator calculates the F1 score for a given response and ground truth, which measures the overlap between the generated response and the ground truth by combining precision and recall into a single metric.
+
+- **Input**: 
+  - `response`: The model's generated text
+  - `reference`: The reference text to compare against
+- **Output**: A float between 0 and 1, where 0 indicates no overlap and 1 indicates a perfect match
+- **Usage**: Useful for evaluating how well a response captures the correct information, balancing both completeness (recall) and accuracy (precision)
+
+This evaluator calculates precision (proportion of shared words relative to the total words in the response) and recall (proportion of shared words relative to the total words in the ground truth), then computes the F1 score as the harmonic mean of these two values.
+
+#### ROUGE Score (`RougeScore`)
+
+[ROUGE (Recall-Oriented Understudy for Gisting Evaluation)](../src/promptlab/evaluator/rouge.py) measures the similarity between generated text and reference text based on n-gram overlaps and sequence matching.
+
+- **Input**: 
+  - `response`: The model's generated text
+  - `reference`: The reference text to compare against
+- **Output**: A float value between 0 and 1, where higher scores indicate better matches
+- **Parameters**:
+  - `rouge_type`: Type of ROUGE score to calculate (default: "rouge1")
+  - `precision_threshold`: Minimum acceptable precision (default: 0.5)
+  - `recall_threshold`: Minimum acceptable recall (default: 0.5)
+  - `f1_score_threshold`: Minimum acceptable F1 score (default: 0.5)
+- **Usage**: Useful for evaluating text summarization, machine translation, or any scenario where capturing relevant content from a reference is critical—especially with a focus on recall
+
+The implementation supports several ROUGE variants:
+  - rouge1: Unigram overlap
+  - rouge2: Bigram overlap
+  - rougeL: Longest common subsequence matching
 
 ### RAG (Retrieval Augmented Generation)
 

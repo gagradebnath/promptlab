@@ -1,10 +1,15 @@
 import json
 import os
 import re
+import threading
 from typing import Dict, List, Tuple
+
+import nltk
 
 
 class Utils:
+    _nltk_data_download_lock = threading.Lock()
+
     @staticmethod
     def sanitize_path(value: str) -> str:
         if any(char in value for char in '<>"|?*'):
@@ -44,3 +49,28 @@ class Utils:
         prompt_template_variables = list(set(prompt_template_variables))
 
         return system_prompt, user_prompt, prompt_template_variables
+
+    @staticmethod
+    def download_required_nltk_resources():
+        """
+        Ensure all required NLTK language processing resources are available locally.
+
+        This method checks for the presence of necessary NLTK packages and
+        downloads them if they're not already installed. Thread-safe implementation
+        prevents multiple concurrent downloads of the same resources.
+        """
+        required_resources = [
+            ("punkt", "tokenizers/punkt.zip"),
+            ("punkt_tab", "tokenizers/punkt_tab.zip"),
+        ]
+
+        with Utils._nltk_data_download_lock:
+            for package_name, resource_path in required_resources:
+                try:
+                    nltk.data.find(resource_path)
+                except LookupError:
+                    nltk.download(package_name)
+                except Exception as e:
+                    print(
+                        f"Error checking/downloading NLTK resource {package_name}: {str(e)}"
+                    )

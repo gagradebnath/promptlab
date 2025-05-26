@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(0, r"G:\coding\promptlab\src")
+
 from promptlab import PromptLab
 from promptlab.model.ollama import Ollama, Ollama_Embedding
 from promptlab.types import ModelConfig, PromptTemplate, Dataset
